@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <link rel="stylesheet" href="mdui-v1.0.2/css/mdui.min.css">
+    <script src="mdui-v1.0.2/js/mdui.min.js"></script>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <title>备忘录</title>
+</head>
+
+<body class="mdui-theme-primary-indigo mdui-theme-accent-pink mdui-drawer-body-left">
+    <div class="mdui-appbar mdui-appbar-inset">
+        <div class="mdui-toolbar mdui-color-theme">
+            <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#drawer', swipe: true}">
+                <i class="mdui-icon material-icons">menu</i>
+            </a>
+            <a class="mdui-typo-title">备忘录</a>
+            <div class="mdui-toolbar-spacer"></div>
+            <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '删除'}" style="display: none;" id="delete" mdui-dialog="{target: '#deleting'}">
+                <i class="mdui-icon material-icons">delete</i>
+            </a>
+            <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '星标'}" style="display: none;" id="star">
+                <i class="mdui-icon material-icons" id="starIcon" onclick="javascript:starNote();">star_border</i>
+            </a>
+            <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '新建'}" onclick="javascript:newNote();">
+                <i class="mdui-icon material-icons">add</i>
+            </a>
+        </div>
+    </div>
+    <div class="mdui-drawer mdui-drawer-full-height" id="drawer" style="transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);">
+        <ul class="mdui-list" id="noteList" style="width: 100%;"></ul>
+        <div id="guide" style="width: 100%;text-align: center;">
+            <div class="mdui-typo-body-2 mdui-text-center mdui-m-b-1">没有可显示的内容</div>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="javascript:newNote();">新建备忘录</button>
+        </div>
+    </div>
+    <div id="choose"><button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" style="margin: 16px;" onclick="javascript:new mdui.Drawer('#drawer').open();">选择一个备忘录</button></div>
+    <form class="mdui-center" style="padding: 16px;max-width: 640px;">
+        <div class="mdui-textfield">
+            <label class="mdui-textfield-label">标题</label>
+            <input class="mdui-textfield-input" type="text" id="title" />
+        </div>
+        <div class="mdui-textfield">
+            <label class="mdui-textfield-label">内容</label>
+            <textarea class="mdui-textfield-input" type="text" id="content"></textarea>
+        </div>
+        <div class="mdui-textfield">
+            <label class="mdui-textfield-label">修改日期</label>
+            <input class="mdui-textfield-input" type="text" id="date" disabled />
+        </div>
+    </form>
+    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" onclick="javascript:saveNote();" id="save" disabled="disabled">保存</button>
+    <div class="mdui-typo-body-2 mdui-text-center mdui-m-t-2">Made by Burger Studio.</div>
+    <div class="mdui-dialog" id="deleting">
+        <div class="mdui-dialog-title">删除此备忘录？</div>
+        <div class="mdui-dialog-content">这将使你丢失它的全部数据。</div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+            <button class="mdui-btn mdui-ripple" onclick="javascript:deleteNote();" mdui-dialog-close>确定</button>
+        </div>
+    </div>
+    <script>
+        var drawer = document.getElementById('drawer');
+        var guide = document.getElementById('guide');
+        var noteList = document.getElementById('noteList');
+        var editing = "";
+        var title = document.getElementById('title');
+        var content = document.getElementById('content');
+        var deletebtn = document.getElementById('delete');
+        var star = document.getElementById('star');
+        var starIcon = document.getElementById('starIcon');
+        var date = document.getElementById('date');
+        var save = document.getElementById('save');
+        var choose = document.getElementById('choose');
+        if (localStorage.notes) {
+            showButtons1();
+            loadNotes();
+        } else {
+            hideButtons1();
+        }
+
+        function newNote() {
+            if (localStorage.notes) {
+                localStorage.setItem("notes", Number(localStorage.getItem("notes")) + 1);
+            } else {
+                localStorage.setItem("notes", 0);
+            }
+            showButtons1();
+            showButtons2();
+            localStorage.setItem("noteTitle" + localStorage.getItem("notes"), "备忘录 " + Number(Number(localStorage.getItem("notes")) + 1));
+            localStorage.setItem("noteContent" + localStorage.getItem("notes"), "");
+            localStorage.setItem("noteStared" + localStorage.getItem("notes"), "false");
+            localStorage.setItem("noteDeleted" + localStorage.getItem("notes"), "false");
+            localStorage.setItem("noteDate" + localStorage.getItem("notes"), new Date());
+            loadNotes();
+            editing = localStorage.getItem("notes");
+            editNote();
+        }
+
+        function loadNotes() {
+            var noteListItems = "";
+            var notes = 0;
+            for (i = 0; i <= localStorage.getItem("notes"); i++) {
+                noteListItems += "<li class='mdui-list-item mdui-ripple mdui-ripple-black' name='noteListItems' id='" + i + "'><i class='mdui-list-item-icon mdui-icon material-icons'>edit</i><div class='mdui-list-item-content'>" + localStorage.getItem("noteTitle" + i) + "</div></li>";
+                noteList.innerHTML = noteListItems;
+            }
+            for (i = 0; i <= localStorage.getItem("notes"); i++) {
+                if (localStorage.getItem("noteStared" + i) == "true") {
+                    document.getElementsByName("noteListItems")[i].classList.add("mdui-color-amber-100");
+                }
+                if (localStorage.getItem("noteDeleted" + i) == "true") {
+                    document.getElementsByName("noteListItems")[i].style.display = "none";
+                }
+                document.getElementsByName("noteListItems")[i].addEventListener("click", function() {
+                    editing = this.id;
+                    editNote();
+                });
+                if (localStorage.getItem("noteDeleted" + i) != "true") {
+                    notes += 1;
+                }
+            }
+            if (editing != "") {
+                document.getElementsByName("noteListItems")[editing].classList.add("mdui-list-item-active");
+                if (localStorage.getItem("noteStared" + editing) == "true") {
+                    document.getElementsByName("noteListItems")[editing].classList.add("mdui-color-amber-200");
+                }
+            }
+            if (notes == 0) {
+                hideButtons1();
+            }
+        }
+
+        function editNote() {
+            showButtons2();
+            title.value = localStorage.getItem("noteTitle" + editing);
+            content.value = localStorage.getItem("noteContent" + editing);
+            date.value = localStorage.getItem("noteDate" + editing);
+            for (i = 0; i <= localStorage.getItem("notes"); i++) {
+                if (i == editing) {
+                    document.getElementsByName("noteListItems")[i].classList.add("mdui-list-item-active");
+                    if (localStorage.getItem("noteStared" + i) == "true") {
+                        document.getElementsByName("noteListItems")[i].classList.add("mdui-color-amber-200");
+                    }
+                } else {
+                    document.getElementsByName("noteListItems")[i].classList.remove("mdui-list-item-active", "mdui-color-amber-200");
+                }
+            }
+            if (localStorage.getItem("noteStared" + editing) == "true") {
+                starIcon.innerHTML = "star";
+            } else {
+                starIcon.innerHTML = "star_border";
+            }
+        }
+
+        function saveNote() {
+            localStorage.setItem("noteTitle" + editing, title.value);
+            localStorage.setItem("noteContent" + editing, content.value);
+            localStorage.setItem("noteDate" + editing, new Date());
+            mdui.snackbar("已保存");
+            loadNotes();
+            editNote();
+        }
+
+        function starNote() {
+            if (localStorage.getItem("noteStared" + editing) == "true") {
+                localStorage.setItem("noteStared" + editing, "false");
+                mdui.snackbar("已取消星标");
+                starIcon.innerHTML = "star_border";
+            } else {
+                localStorage.setItem("noteStared" + editing, "true");
+                mdui.snackbar("已设为星标");
+                starIcon.innerHTML = "star";
+            }
+            loadNotes();
+        }
+
+        function deleteNote() {
+            localStorage.setItem("noteTitle" + editing, "");
+            localStorage.setItem("noteContent" + editing, "");
+            localStorage.setItem("noteStared" + editing, "");
+            localStorage.setItem("noteDeleted" + editing, "true");
+            localStorage.setItem("noteDate" + editing, "");
+            mdui.snackbar("已删除");
+            loadNotes();
+            hideButtons2();
+        }
+
+        function showButtons1() {
+            drawer.classList.remove("mdui-valign");
+            guide.style.display = "none";
+            noteList.style.display = "block";
+        }
+
+        function showButtons2() {
+            choose.style.display = "none";
+            deletebtn.style.display = "block";
+            star.style.display = "block";
+            save.disabled = "";
+        }
+
+        function hideButtons1() {
+            drawer.classList.add("mdui-valign");
+            guide.style.display = "block";
+            noteList.style.display = "none";
+        }
+
+        function hideButtons2() {
+            choose.style.display = "block";
+            deletebtn.style.display = "none";
+            star.style.display = "none";
+            save.disabled = "disabled";
+        }
+    </script>
+</body>
+
+</html>
