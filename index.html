@@ -7,9 +7,14 @@
     <script src="mdui-v1.0.2/js/mdui.min.js"></script>
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
     <title>备忘录</title>
+    <style>
+        .mdui-select {
+            width: 100%;
+        }
+    </style>
 </head>
 
-<body class="mdui-theme-primary-indigo mdui-theme-accent-pink mdui-drawer-body-left">
+<body class="mdui-theme-primary-indigo mdui-theme-accent-pink mdui-drawer-body-left mdui-theme-layout-auto">
     <div class="mdui-appbar mdui-appbar-inset">
         <div class="mdui-toolbar mdui-color-theme">
             <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#drawer', swipe: true}">
@@ -26,6 +31,9 @@
             <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '新建'}" onclick="javascript:newNote();">
                 <i class="mdui-icon material-icons">add</i>
             </a>
+            <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '夜间模式'}" onclick="javascript:darkMode();">
+                <i class="mdui-icon material-icons">brightness_medium</i>
+            </a>
         </div>
     </div>
     <div class="mdui-drawer mdui-drawer-full-height" id="drawer" style="transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);">
@@ -37,6 +45,15 @@
     </div>
     <div id="choose"><button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" style="margin: 16px;" onclick="javascript:new mdui.Drawer('#drawer').open();">选择一个备忘录</button></div>
     <form class="mdui-center" style="padding: 16px;max-width: 640px;">
+        <div onclick="javascript:loadType();" style="padding: 8px;transition: 0.2s;" id="selectDiv">
+            <select class="mdui-select" mdui-select>
+                <option id="travel">旅游</option>
+                <option id="person">个人</option>
+                <option id="life">生活</option>
+                <option id="work">工作</option>
+                <option id="none" selected>未分类</option>
+            </select>
+        </div>
         <div class="mdui-textfield">
             <label class="mdui-textfield-label">标题</label>
             <input class="mdui-textfield-input" type="text" id="title" />
@@ -73,6 +90,7 @@
         var date = document.getElementById('date');
         var save = document.getElementById('save');
         var choose = document.getElementById('choose');
+        var selectDiv = document.getElementById('selectDiv');
         if (localStorage.notes) {
             showButtons1();
             loadNotes();
@@ -93,6 +111,7 @@
             localStorage.setItem("noteStared" + localStorage.getItem("notes"), "false");
             localStorage.setItem("noteDeleted" + localStorage.getItem("notes"), "false");
             localStorage.setItem("noteDate" + localStorage.getItem("notes"), new Date());
+            localStorage.setItem("noteType" + localStorage.getItem("notes"), "none");
             loadNotes();
             editing = localStorage.getItem("notes");
             editNote();
@@ -102,12 +121,13 @@
             var noteListItems = "";
             var notes = 0;
             for (i = 0; i <= localStorage.getItem("notes"); i++) {
-                noteListItems += "<li class='mdui-list-item mdui-ripple mdui-ripple-black' name='noteListItems' id='" + i + "'><i class='mdui-list-item-icon mdui-icon material-icons'>edit</i><div class='mdui-list-item-content'>" + localStorage.getItem("noteTitle" + i) + "</div></li>";
+                noteListItems += "<li class='mdui-list-item mdui-ripple mdui-ripple-black' name='noteListItems' id='" + i + "'><i class='mdui-list-item-icon mdui-icon material-icons' name='noteIcons'>edit</i><div class='mdui-list-item-content'>" + localStorage.getItem("noteTitle" + i) + "</div></li>";
                 noteList.innerHTML = noteListItems;
             }
             for (i = 0; i <= localStorage.getItem("notes"); i++) {
                 if (localStorage.getItem("noteStared" + i) == "true") {
-                    document.getElementsByName("noteListItems")[i].classList.add("mdui-color-amber-100");
+                    document.getElementsByName("noteIcons")[i].innerHTML = "star";
+                    document.getElementsByName("noteIcons")[i].classList.add("mdui-text-color-amber");
                 }
                 if (localStorage.getItem("noteDeleted" + i) == "true") {
                     document.getElementsByName("noteListItems")[i].style.display = "none";
@@ -119,12 +139,22 @@
                 if (localStorage.getItem("noteDeleted" + i) != "true") {
                     notes += 1;
                 }
+                if (localStorage.getItem("noteType" + i) == "travel") {
+                    document.getElementsByName("noteListItems")[i].classList.add("mdui-color-yellow-100");
+                }
+                if (localStorage.getItem("noteType" + i) == "person") {
+                    document.getElementsByName("noteListItems")[i].classList.add("mdui-color-blue-100");
+                }
+                if (localStorage.getItem("noteType" + i) == "life") {
+                    document.getElementsByName("noteListItems")[i].classList.add("mdui-color-green-100");
+                }
+                if (localStorage.getItem("noteType" + i) == "work") {
+                    document.getElementsByName("noteListItems")[i].classList.add("mdui-color-red-100");
+                }
             }
             if (editing != "") {
                 document.getElementsByName("noteListItems")[editing].classList.add("mdui-list-item-active");
-                if (localStorage.getItem("noteStared" + editing) == "true") {
-                    document.getElementsByName("noteListItems")[editing].classList.add("mdui-color-amber-200");
-                }
+                document.getElementsByName("noteListItems")[editing].classList.add("mdui-color-" + color + "-200");
             }
             if (notes == 0) {
                 hideButtons1();
@@ -137,13 +167,29 @@
             content.value = localStorage.getItem("noteContent" + editing);
             date.value = localStorage.getItem("noteDate" + editing);
             for (i = 0; i <= localStorage.getItem("notes"); i++) {
+                type = localStorage.getItem("noteType" + i);
+                if (type == "travel") {
+                    colour = "yellow";
+                }
+                if (type == "person") {
+                    colour = "blue";
+                }
+                if (type == "life") {
+                    colour = "green";
+                }
+                if (type == "work") {
+                    colour = "red";
+                }
+                if (type == "none" || type == null) {
+                    colour = "";
+                }
                 if (i == editing) {
                     document.getElementsByName("noteListItems")[i].classList.add("mdui-list-item-active");
-                    if (localStorage.getItem("noteStared" + i) == "true") {
-                        document.getElementsByName("noteListItems")[i].classList.add("mdui-color-amber-200");
-                    }
+                    document.getElementsByName("noteListItems")[i].classList.remove("mdui-color-yellow-100", "mdui-color-blue-100", "mdui-color-green-100", "mdui-color-red-100");
+                    document.getElementsByName("noteListItems")[i].classList.add("mdui-color-" + colour + "-200");
                 } else {
-                    document.getElementsByName("noteListItems")[i].classList.remove("mdui-list-item-active", "mdui-color-amber-200");
+                    document.getElementsByName("noteListItems")[i].classList.remove("mdui-list-item-active", "mdui-color-yellow-200", "mdui-color-blue-200", "mdui-color-green-200", "mdui-color-red-200");
+                    document.getElementsByName("noteListItems")[i].classList.add("mdui-color-" + colour + "-100");
                 }
             }
             if (localStorage.getItem("noteStared" + editing) == "true") {
@@ -151,6 +197,7 @@
             } else {
                 starIcon.innerHTML = "star_border";
             }
+            selectItem(localStorage.getItem("noteType" + editing));
         }
 
         function saveNote() {
@@ -176,11 +223,12 @@
         }
 
         function deleteNote() {
-            localStorage.setItem("noteTitle" + editing, "");
-            localStorage.setItem("noteContent" + editing, "");
-            localStorage.setItem("noteStared" + editing, "");
+            localStorage.removeItem("noteTitle" + editing);
+            localStorage.removeItem("noteContent" + editing);
+            localStorage.removeItem("noteStared" + editing);
             localStorage.setItem("noteDeleted" + editing, "true");
-            localStorage.setItem("noteDate" + editing, "");
+            localStorage.removeItem("noteDate" + editing);
+            localStorage.removeItem("noteType" + editing);
             mdui.snackbar("已删除");
             loadNotes();
             hideButtons2();
@@ -210,6 +258,98 @@
             deletebtn.style.display = "none";
             star.style.display = "none";
             save.disabled = "disabled";
+        }
+        typeLoaded = 0;
+
+        function loadType() {
+            if (typeLoaded != 1) {
+                document.getElementsByClassName("mdui-select-menu-item")[0].classList.add("mdui-color-yellow-100");
+                document.getElementsByClassName("mdui-select-menu-item")[1].classList.add("mdui-color-blue-100");
+                document.getElementsByClassName("mdui-select-menu-item")[2].classList.add("mdui-color-green-100");
+                document.getElementsByClassName("mdui-select-menu-item")[3].classList.add("mdui-color-red-100");
+                document.getElementsByClassName("mdui-select-menu-item")[0].addEventListener("click", function() {
+                    setNoteType("travel");
+                });
+                document.getElementsByClassName("mdui-select-menu-item")[1].addEventListener("click", function() {
+                    setNoteType("person");
+                });
+                document.getElementsByClassName("mdui-select-menu-item")[2].addEventListener("click", function() {
+                    setNoteType("life");
+                });
+                document.getElementsByClassName("mdui-select-menu-item")[3].addEventListener("click", function() {
+                    setNoteType("work");
+                });
+                document.getElementsByClassName("mdui-select-menu-item")[4].addEventListener("click", function() {
+                    setNoteType("none");
+                });
+            }
+            typeLoaded = 1;
+        }
+
+        function setNoteType(type) {
+            if (editing != "") {
+                if (type == "travel") {
+                    localStorage.setItem("noteType" + editing, "travel");
+                    mdui.snackbar("已分类至“旅游“");
+                }
+                if (type == "person") {
+                    localStorage.setItem("noteType" + editing, "person");
+                    mdui.snackbar("已分类至“个人“");
+                }
+                if (type == "life") {
+                    localStorage.setItem("noteType" + editing, "life");
+                    mdui.snackbar("已分类至“生活“");
+                }
+                if (type == "work") {
+                    localStorage.setItem("noteType" + editing, "work");
+                    mdui.snackbar("已分类至“工作“");
+                }
+                if (type == "none") {
+                    localStorage.setItem("noteType" + editing, "none");
+                    mdui.snackbar("已分类至“未分类“");
+                }
+                loadNotes();
+                selectItem(type);
+            }
+        }
+
+        function selectItem(type) {
+            if (type == "travel") {
+                typeName = "旅游";
+                color = "yellow";
+            }
+            if (type == "person") {
+                typeName = "个人";
+                color = "blue";
+            }
+            if (type == "life") {
+                typeName = "生活";
+                color = "green";
+            }
+            if (type == "work") {
+                typeName = "工作";
+                color = "red";
+            }
+            if (type == "none") {
+                typeName = "未分类";
+                color = "";
+            }
+            selectDiv.classList.remove("mdui-color-yellow-100", "mdui-color-blue-100", "mdui-color-green-100", "mdui-color-red-100");
+            document.getElementsByClassName("mdui-select-selected")[0].innerHTML = typeName;
+            selectDiv.classList.add("mdui-color-" + color + "-100");
+        }
+
+        function darkMode() {
+            if (localStorage.getItem("darkMode") == "true") {
+                localStorage.setItem("darkMode", "false");
+                document.body.classList.remove("mdui-theme-layout-dark");
+            } else {
+                localStorage.setItem("darkMode", "true");
+                document.body.classList.add("mdui-theme-layout-dark");
+            }
+        }
+        if (localStorage.getItem("darkMode") == "true") {
+            document.body.classList.add("mdui-theme-layout-dark");
         }
     </script>
 </body>
