@@ -43,7 +43,7 @@
             <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="javascript:newNote();">新建备忘录</button>
         </div>
     </div>
-    <div id="choose"><button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" style="margin: 16px;" onclick="javascript:new mdui.Drawer('#drawer').open();">选择一个备忘录</button></div>
+    <div id="choose"><button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" style="margin: 16px;" onclick="javascript:new mdui.Drawer('#drawer', {swipe: true}).open();">选择一个备忘录</button></div>
     <form class="mdui-center" style="padding: 16px;max-width: 640px;">
         <div onclick="javascript:loadType();" style="padding: 8px;transition: 0.2s;" id="selectDiv">
             <select class="mdui-select" mdui-select>
@@ -67,7 +67,7 @@
             <input class="mdui-textfield-input" type="text" id="date" disabled />
         </div>
     </form>
-    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" onclick="javascript:saveNote();" id="save" disabled="disabled">保存</button>
+    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" onclick="javascript:saveNote('snackBar');" id="save" disabled="disabled">保存</button>
     <div class="mdui-typo-body-2 mdui-text-center mdui-m-t-2">Made by Burger Studio.</div>
     <div class="mdui-dialog" id="deleting">
         <div class="mdui-dialog-title">删除此备忘录？</div>
@@ -139,17 +139,21 @@
                 if (localStorage.getItem("noteDeleted" + i) != "true") {
                     notes += 1;
                 }
-                if (localStorage.getItem("noteType" + i) == "travel") {
+                type = localStorage.getItem("noteType" + i);
+                if (type == "travel") {
                     document.getElementsByName("noteListItems")[i].classList.add("mdui-color-yellow-100");
                 }
-                if (localStorage.getItem("noteType" + i) == "person") {
+                if (type == "person") {
                     document.getElementsByName("noteListItems")[i].classList.add("mdui-color-blue-100");
                 }
-                if (localStorage.getItem("noteType" + i) == "life") {
+                if (type == "life") {
                     document.getElementsByName("noteListItems")[i].classList.add("mdui-color-green-100");
                 }
-                if (localStorage.getItem("noteType" + i) == "work") {
+                if (type == "work") {
                     document.getElementsByName("noteListItems")[i].classList.add("mdui-color-red-100");
+                }
+                if (type == "none" || type == "") {
+                    document.getElementsByName("noteListItems")[i].classList.remove("mdui-ripple-black");
                 }
             }
             if (editing != "") {
@@ -165,6 +169,8 @@
             showButtons2();
             title.value = localStorage.getItem("noteTitle" + editing);
             content.value = localStorage.getItem("noteContent" + editing);
+            content.focus();
+            content.blur();
             date.value = localStorage.getItem("noteDate" + editing);
             for (i = 0; i <= localStorage.getItem("notes"); i++) {
                 type = localStorage.getItem("noteType" + i);
@@ -198,13 +204,21 @@
                 starIcon.innerHTML = "star_border";
             }
             selectItem(localStorage.getItem("noteType" + editing));
+            if (document.body.clientWidth < 1024 && document.getElementsByClassName("mdui-overlay")[0] != undefined) {
+                new mdui.Drawer("#drawer", {
+                    swipe: true
+                }).close();
+                document.getElementsByClassName("mdui-overlay")[0].click();
+            }
         }
 
-        function saveNote() {
+        function saveNote(options) {
             localStorage.setItem("noteTitle" + editing, title.value);
             localStorage.setItem("noteContent" + editing, content.value);
             localStorage.setItem("noteDate" + editing, new Date());
-            mdui.snackbar("已保存");
+            if (options == "snackBar") {
+                mdui.snackbar("已保存");
+            }
             loadNotes();
             editNote();
         }
@@ -262,11 +276,12 @@
         typeLoaded = 0;
 
         function loadType() {
+            autoSettingType = 0;
             if (typeLoaded != 1) {
-                document.getElementsByClassName("mdui-select-menu-item")[0].classList.add("mdui-color-yellow-100");
-                document.getElementsByClassName("mdui-select-menu-item")[1].classList.add("mdui-color-blue-100");
-                document.getElementsByClassName("mdui-select-menu-item")[2].classList.add("mdui-color-green-100");
-                document.getElementsByClassName("mdui-select-menu-item")[3].classList.add("mdui-color-red-100");
+                document.getElementsByClassName("mdui-select-menu-item")[0].classList.add("mdui-color-yellow-100", "mdui-ripple-black");
+                document.getElementsByClassName("mdui-select-menu-item")[1].classList.add("mdui-color-blue-100", "mdui-ripple-black");
+                document.getElementsByClassName("mdui-select-menu-item")[2].classList.add("mdui-color-green-100", "mdui-ripple-black");
+                document.getElementsByClassName("mdui-select-menu-item")[3].classList.add("mdui-color-red-100", "mdui-ripple-black");
                 document.getElementsByClassName("mdui-select-menu-item")[0].addEventListener("click", function() {
                     setNoteType("travel");
                 });
@@ -287,7 +302,7 @@
         }
 
         function setNoteType(type) {
-            if (editing != "") {
+            if (editing != "" && autoSettingType == 0) {
                 if (type == "travel") {
                     localStorage.setItem("noteType" + editing, "travel");
                     mdui.snackbar("已分类至“旅游“");
@@ -308,35 +323,38 @@
                     localStorage.setItem("noteType" + editing, "none");
                     mdui.snackbar("已分类至“未分类“");
                 }
-                loadNotes();
+                saveNote();
+                document.getElementsByName("noteListItems")[editing].classList.remove("mdui-color-yellow-100", "mdui-color-blue-100", "mdui-color-green-100", "mdui-color-red-100", "mdui-color-yellow-200", "mdui-color-blue-200", "mdui-color-green-200", "mdui-color-red-200");
+                editNote();
                 selectItem(type);
             }
         }
 
         function selectItem(type) {
             if (type == "travel") {
-                typeName = "旅游";
                 color = "yellow";
+                i = 0;
             }
             if (type == "person") {
-                typeName = "个人";
                 color = "blue";
+                i = 1;
             }
             if (type == "life") {
-                typeName = "生活";
                 color = "green";
+                i = 2;
             }
             if (type == "work") {
-                typeName = "工作";
                 color = "red";
+                i = 3;
             }
-            if (type == "none") {
-                typeName = "未分类";
+            if (type == "none" || type == "") {
                 color = "";
+                i = 4;
             }
             selectDiv.classList.remove("mdui-color-yellow-100", "mdui-color-blue-100", "mdui-color-green-100", "mdui-color-red-100");
-            document.getElementsByClassName("mdui-select-selected")[0].innerHTML = typeName;
             selectDiv.classList.add("mdui-color-" + color + "-100");
+            autoSettingType = 1;
+            document.getElementsByClassName("mdui-select-menu-item")[i].click();
         }
 
         function darkMode() {
