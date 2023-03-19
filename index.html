@@ -43,7 +43,7 @@
             <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="javascript:newNote();">新建备忘录</button>
         </div>
     </div>
-    <div id="choose"><button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" style="margin: 16px;" onclick="javascript:new mdui.Drawer('#drawer', {swipe: true}).open();">选择一个备忘录</button></div>
+    <div id="choose"><button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" style="margin: 16px;" onclick="javascript:new mdui.Drawer('#drawer', {swipe: true}).open();">选择一条备忘录</button></div>
     <form class="mdui-center" style="padding: 16px;max-width: 640px;">
         <div onclick="javascript:loadType();" style="padding: 8px;transition: 0.2s;" id="selectDiv">
             <select class="mdui-select" mdui-select>
@@ -110,7 +110,8 @@
             localStorage.setItem("noteContent" + localStorage.getItem("notes"), "");
             localStorage.setItem("noteStared" + localStorage.getItem("notes"), "false");
             localStorage.setItem("noteDeleted" + localStorage.getItem("notes"), "false");
-            localStorage.setItem("noteDate" + localStorage.getItem("notes"), new Date());
+            getNowDate();
+            localStorage.setItem("noteDate" + localStorage.getItem("notes"), formattedDate);
             localStorage.setItem("noteType" + localStorage.getItem("notes"), "none");
             loadNotes();
             editing = localStorage.getItem("notes");
@@ -215,7 +216,8 @@
         function saveNote(options) {
             localStorage.setItem("noteTitle" + editing, title.value);
             localStorage.setItem("noteContent" + editing, content.value);
-            localStorage.setItem("noteDate" + editing, new Date());
+            getNowDate();
+            localStorage.setItem("noteDate" + editing, formattedDate);
             if (options == "snackBar") {
                 mdui.snackbar("已保存");
             }
@@ -246,6 +248,7 @@
             mdui.snackbar("已删除");
             loadNotes();
             hideButtons2();
+            editing = "";
         }
 
         function showButtons1() {
@@ -368,6 +371,32 @@
         }
         if (localStorage.getItem("darkMode") == "true") {
             document.body.classList.add("mdui-theme-layout-dark");
+        }
+
+        function getNowDate() {
+            nowDate = new Date();
+            year = nowDate.getFullYear();
+            month = Number(nowDate.getMonth() + 1);
+            if (month < 10) {
+                month = "0" + month;
+            }
+            day = nowDate.getDate();
+            if (day < 10) {
+                day = "0" + day;
+            }
+            hours = nowDate.getHours();
+            if (hours < 10) {
+                hours = "0" + hours;
+            }
+            minutes = nowDate.getMinutes();
+            if (minutes < 10) {
+                minutes = "0" + minutes;
+            }
+            seconds = nowDate.getSeconds();
+            if (seconds < 10) {
+                seconds = "0" + seconds;
+            }
+            formattedDate = year + "/" + month + "/" + day + " " + hours + ":" + minutes + ":" + seconds;
         }
     </script>
 </body>
