@@ -153,7 +153,7 @@
             <input class="mdui-textfield-input" type="text" id="date" disabled />
         </div>
     </form>
-    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" onclick="javascript:saveNote('snackBar');" id="save" disabled="disabled">保存</button>
+    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" onclick="javascript:saveNote();" id="save" disabled="disabled">保存</button>
     <div class="mdui-typo-body-2 mdui-text-center mdui-m-t-2">Made by Burger Studio.</div>
     <div class="mdui-dialog" id="deleting">
         <div class="mdui-dialog-title">删除此备忘录？</div>
@@ -203,7 +203,7 @@
             showButtons2();
             localStorage.setItem("noteTitle" + localStorage.getItem("notes"), "备忘录 " + Number(Number(localStorage.getItem("notes")) + 1));
             localStorage.setItem("noteContent" + localStorage.getItem("notes"), "");
-            localStorage.setItem("noteStared" + localStorage.getItem("notes"), "false");
+            localStorage.setItem("noteStarred" + localStorage.getItem("notes"), "false");
             localStorage.setItem("noteDeleted" + localStorage.getItem("notes"), "false");
             getNowDate();
             localStorage.setItem("noteDate" + localStorage.getItem("notes"), formattedDate);
@@ -221,7 +221,7 @@
                 noteList.innerHTML = noteListItems;
             }
             for (i = 0; i <= localStorage.getItem("notes"); i++) {
-                if (localStorage.getItem("noteStared" + i) == "true") {
+                if (localStorage.getItem("noteStarred" + i) == "true") {
                     document.getElementsByName("noteIcons")[i].innerHTML = "star";
                     document.getElementsByName("noteIcons")[i].classList.add("mdui-text-color-amber");
                 }
@@ -294,7 +294,7 @@
                         document.getElementsByName("noteListItems")[i].classList.add("mdui-color-" + colour + "-100");
                     }
                 }
-                if (localStorage.getItem("noteStared" + editing) == "true") {
+                if (localStorage.getItem("noteStarred" + editing) == "true") {
                     starIcon.innerHTML = "star";
                 } else {
                     starIcon.innerHTML = "star_border";
@@ -311,14 +311,12 @@
             }
         }
 
-        function saveNote(options) {
+        function saveNote() {
             localStorage.setItem("noteTitle" + editing, title.value);
             localStorage.setItem("noteContent" + editing, content.value);
             getNowDate();
             localStorage.setItem("noteDate" + editing, formattedDate);
-            if (options == "snackBar") {
-                mdui.snackbar("已保存");
-            }
+            mdui.snackbar("已保存");
             saved = 1;
             loadNotes();
             editNote();
@@ -326,12 +324,12 @@
         }
 
         function starNote() {
-            if (localStorage.getItem("noteStared" + editing) == "true") {
-                localStorage.setItem("noteStared" + editing, "false");
+            if (localStorage.getItem("noteStarred" + editing) == "true") {
+                localStorage.setItem("noteStarred" + editing, "false");
                 mdui.snackbar("已取消星标");
                 starIcon.innerHTML = "star_border";
             } else {
-                localStorage.setItem("noteStared" + editing, "true");
+                localStorage.setItem("noteStarred" + editing, "true");
                 mdui.snackbar("已设为星标");
                 starIcon.innerHTML = "star";
             }
@@ -341,7 +339,7 @@
         function deleteNote() {
             localStorage.removeItem("noteTitle" + editing);
             localStorage.removeItem("noteContent" + editing);
-            localStorage.removeItem("noteStared" + editing);
+            localStorage.removeItem("noteStarred" + editing);
             localStorage.setItem("noteDeleted" + editing, "true");
             localStorage.removeItem("noteDate" + editing);
             localStorage.removeItem("noteType" + editing);
@@ -534,7 +532,7 @@
         function change(options) {
             saved = 1;
             if (options == "save") {
-                saveNote("snackBar");
+                saveNote();
                 editNote();
             }
             if (options == "doNotSave") {
