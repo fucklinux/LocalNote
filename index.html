@@ -212,6 +212,7 @@
             preEdit = localStorage.getItem("notes");
             editNote();
         }
+        var saved = 1;
 
         function loadNotes() {
             var noteListItems = "";
@@ -256,8 +257,10 @@
             if (notes == 0) {
                 hideButtons1();
             }
+            if (saved == 0) {
+                document.getElementsByClassName("mdui-list-item-content")[editing].innerHTML = "*" + document.getElementsByClassName("mdui-list-item-content")[editing].innerHTML;
+            }
         }
-        saved = 1;
 
         function editNote() {
             if (saved == 1) {
