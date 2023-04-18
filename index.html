@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <link rel="stylesheet" href="mdui-v1.0.2/css/mdui.min.css">
     <script src="mdui-v1.0.2/js/mdui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="waves/waves.min.css" />
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
     <title>备忘录</title>
     <style>
@@ -50,8 +51,12 @@
             color: white !important;
         }
 
-        .mdui-theme-layout-dark .mdui-ripple-wave {
-            background-color: rgba(255, 255, 255, 0.3) !important;
+        .mdui-theme-layout-dark .waves-ripple {
+            background: rgba(255, 255, 255, .4) !important;
+            background: -webkit-radial-gradient(rgba(255, 255, 255, .2) 0, rgba(255, 255, 255, .3) 40%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .5) 60%, rgba(255, 255, 255, 0) 70%) !important;
+            background: -o-radial-gradient(rgba(255, 255, 255, .2) 0, rgba(255, 255, 255, .3) 40%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .5) 60%, rgba(255, 255, 255, 0) 70%) !important;
+            background: -moz-radial-gradient(rgba(255, 255, 255, .2) 0, rgba(255, 255, 255, .3) 40%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .5) 60%, rgba(255, 255, 255, 0) 70%) !important;
+            background: radial-gradient(rgba(255, 255, 255, .2) 0, rgba(255, 255, 255, .3) 40%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .5) 60%, rgba(255, 255, 255, 0) 70%) !important
         }
 
         @media (prefers-color-scheme: dark) {
@@ -93,45 +98,192 @@
                 color: white !important;
             }
 
-            .mdui-theme-layout-auto .mdui-ripple-wave {
-                background-color: rgba(255, 255, 255, 0.3) !important;
+            .mdui-theme-layout-auto .waves-ripple {
+                background: rgba(255, 255, 255, .4) !important;
+                background: -webkit-radial-gradient(rgba(255, 255, 255, .2) 0, rgba(255, 255, 255, .3) 40%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .5) 60%, rgba(255, 255, 255, 0) 70%) !important;
+                background: -o-radial-gradient(rgba(255, 255, 255, .2) 0, rgba(255, 255, 255, .3) 40%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .5) 60%, rgba(255, 255, 255, 0) 70%) !important;
+                background: -moz-radial-gradient(rgba(255, 255, 255, .2) 0, rgba(255, 255, 255, .3) 40%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .5) 60%, rgba(255, 255, 255, 0) 70%) !important;
+                background: radial-gradient(rgba(255, 255, 255, .2) 0, rgba(255, 255, 255, .3) 40%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .5) 60%, rgba(255, 255, 255, 0) 70%) !important
             }
+
+            .mdui-theme-layout-auto .mdui-color-theme-50 {
+                background-color: #424242 !important;
+                color: #ffffff !important;
+            }
+
+            .mdui-theme-layout-auto .mdui-color-theme-accent {
+                background-color: #C51162 !important;
+                color: #ffffff !important;
+            }
+
+            .mdui-theme-layout-auto .mdui-select-menu {
+                background-color: #424242 !important;
+                color: #ffffff !important;
+            }
+
+            .mdui-theme-layout-auto .mdui-tooltip {
+                background-color: rgba(158, 158, 158, 0.9);
+                color: #000;
+            }
+
+            .mdui-theme-layout-auto .mdui-snackbar {
+                background-color: #CDCDCD;
+                color: #000;
+            }
+        }
+
+        .mdui-btn-raised {
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .mdui-list-item-content {
+            word-wrap: break-word;
+            overflow: auto;
+        }
+
+        form.mdui-center {
+            padding: 16px;
+            max-width: 640px;
+            margin: 16px !important;
+            margin-top: 16px !important;
+            border-radius: 16px;
+        }
+
+        @media (min-width: 672px) {
+            form.mdui-center {
+                margin: auto !important;
+                margin-top: 16px !important;
+            }
+        }
+
+        .mdui-drawer {
+            border-radius: 0 16px 16px 0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 16px;
+        }
+
+        .mdui-theme-layout-dark .mdui-color-theme-50 {
+            background-color: #424242 !important;
+            color: #ffffff !important;
+        }
+
+        .mdui-theme-layout-dark .mdui-color-theme-accent {
+            background-color: #C51162 !important;
+            color: #ffffff !important;
+        }
+
+        .mdui-select-menu {
+            -webkit-box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12) !important;
+            box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12) !important;
+            border-radius: 16px;
+            background-color: #E8EAF6 !important;
+            color: rgba(0, 0, 0, 0.87) !important;
+        }
+
+        .mdui-select-menu-item:hover {
+            background-color: #E8EAF6;
+        }
+
+        .mdui-theme-layout-dark .mdui-select-menu {
+            background-color: #424242 !important;
+            color: #ffffff !important;
+        }
+
+        .mdui-tooltip {
+            border-radius: 16px;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+        }
+
+        .mdui-theme-layout-dark .mdui-tooltip {
+            background-color: rgba(158, 158, 158, 0.9);
+            color: #000;
+        }
+
+        .mdui-snackbar {
+            width: 66.66%;
+            border-radius: 16px 16px 0 0;
+            background-color: rgba(32, 32, 32, 0.9);
+        }
+
+        @media (min-width: 600px) {
+            .mdui-snackbar {
+                width: auto !important;
+                min-width: 288px !important;
+                max-width: 568px !important;
+            }
+        }
+
+        .mdui-snackbar-text {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mdui-theme-layout-dark .mdui-snackbar {
+            background-color: #CDCDCD;
+            color: #000;
+        }
+
+        .mdui-dialog {
+            border-radius: 24px;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+            -webkit-box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12) !important;
+            box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12) !important;
+            -webkit-transition-duration: 0.2s;
+            transition-duration: 0.2s;
+        }
+
+        .mdui-overlay {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .mdui-dialog .mdui-btn {
+            border-radius: 16px;
+        }
+
+        .mdui-drawer {
+            -webkit-transition: transform 0.3s cubic-bezier(0, 0, 0.2, 1) !important;
+            transition: transform 0.3s cubic-bezier(0, 0, 0.2, 1) !important;
         }
     </style>
 </head>
 
 <body class="mdui-theme-primary-indigo mdui-theme-accent-pink mdui-drawer-body-left mdui-theme-layout-auto mdui-appbar-with-toolbar">
-    <div class="mdui-appbar mdui-appbar-fixed">
-        <div class="mdui-toolbar mdui-color-theme">
-            <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#drawer', swipe: true}">
+    <div class="mdui-appbar mdui-appbar-fixed mdui-shadow-3">
+        <div class="mdui-toolbar mdui-color-theme-50">
+            <a class="mdui-btn mdui-btn-icon waves-block" mdui-drawer="{target: '#drawer'}">
                 <i class="mdui-icon material-icons">menu</i>
             </a>
             <a class="mdui-typo-title">备忘录</a>
             <div class="mdui-toolbar-spacer"></div>
-            <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '删除'}" style="display: none;" id="delete" mdui-dialog="{target: '#deleting'}">
+            <a class="mdui-btn mdui-btn-icon waves-block" mdui-tooltip="{content: '删除'}" style="display: none;" id="delete" mdui-dialog="{target: '#deleting'}">
                 <i class="mdui-icon material-icons">delete</i>
             </a>
-            <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '星标'}" style="display: none;" id="star">
+            <a class="mdui-btn mdui-btn-icon waves-block" mdui-tooltip="{content: '星标'}" style="display: none;" id="star">
                 <i class="mdui-icon material-icons" id="starIcon" onclick="javascript:starNote();">star_border</i>
             </a>
-            <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '新建'}" onclick="javascript:newNote();">
+            <a class="mdui-btn mdui-btn-icon waves-block" mdui-tooltip="{content: '新建'}" onclick="javascript:newNote();">
                 <i class="mdui-icon material-icons">add</i>
             </a>
-            <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '夜间模式'}" onclick="javascript:darkMode();">
+            <a class="mdui-btn mdui-btn-icon waves-block" mdui-tooltip="{content: '夜间模式'}" onclick="javascript:darkMode();">
                 <i class="mdui-icon material-icons">brightness_medium</i>
             </a>
         </div>
     </div>
-    <div class="mdui-drawer" id="drawer" style="transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);">
+    <div class="mdui-drawer mdui-color-theme-50 mdui-shadow-3" id="drawer" style="transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);">
         <ul class="mdui-list" id="noteList" style="width: 100%;"></ul>
         <div id="guide" style="width: 100%;text-align: center;">
             <div class="mdui-typo-body-2 mdui-text-center mdui-m-b-1">没有可显示的内容</div>
-            <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="javascript:newNote();">新建备忘录</button>
+            <button class="mdui-btn mdui-btn-raised waves-block mdui-color-theme-accent mdui-valign mdui-center" onclick="javascript:newNote();" style="margin: 12px;">新建备忘录</button>
         </div>
     </div>
-    <div id="choose"><button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" style="margin: 16px;" onclick="javascript:new mdui.Drawer('#drawer', {swipe: true}).open();">选择一条备忘录</button></div>
-    <form class="mdui-center" style="padding: 16px;max-width: 640px;">
-        <div onclick="javascript:loadType();" style="padding: 8px;transition: 0.2s;" id="selectDiv">
+    <div id="choose"><button class="mdui-btn mdui-btn-raised waves-block mdui-color-theme-accent mdui-center mdui-valign" style="margin: 16px;" onclick="javascript:new mdui.Drawer('#drawer').open();">选择一条备忘录</button></div>
+    <form class="mdui-center mdui-color-theme-50" onsubmit="return false;">
+        <div onclick="javascript:loadType();" style="padding: 8px;transition: 0.2s;border-radius: 8px;" id="selectDiv">
             <select class="mdui-select" mdui-select>
                 <option id="travel">旅游</option>
                 <option id="person">个人</option>
@@ -152,24 +304,24 @@
             <label class="mdui-textfield-label">修改日期</label>
             <input class="mdui-textfield-input" type="text" id="date" disabled />
         </div>
+        <button class="mdui-btn mdui-btn-raised waves-block mdui-color-theme-accent mdui-center mdui-valign" onclick="javascript:saveNote();" id="save" disabled="disabled" style="padding: 20px 32px;margin-top: 16px;">保存</button>
     </form>
-    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-center" onclick="javascript:saveNote();" id="save" disabled="disabled">保存</button>
     <div class="mdui-typo-body-2 mdui-text-center mdui-m-t-2">Made by Burger Studio.</div>
-    <div class="mdui-dialog" id="deleting">
+    <div class="mdui-dialog mdui-color-theme-50" id="deleting">
         <div class="mdui-dialog-title">删除此备忘录？</div>
         <div class="mdui-dialog-content">这将使你丢失它的全部数据。</div>
         <div class="mdui-dialog-actions">
-            <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
-            <button class="mdui-btn mdui-ripple" onclick="javascript:deleteNote();" mdui-dialog-close>确定</button>
+            <button class="mdui-btn waves-classic" mdui-dialog-close>取消</button>
+            <button class="mdui-btn waves-classic" onclick="javascript:deleteNote();" mdui-dialog-close>确定</button>
         </div>
     </div>
-    <div class="mdui-dialog" id="saveOrNot">
+    <div class="mdui-dialog mdui-color-theme-50" id="saveOrNot">
         <div class="mdui-dialog-title">如何处理更改？</div>
         <div class="mdui-dialog-content">当前备忘录内容已被更改，但未保存。</div>
         <div class="mdui-dialog-actions">
-            <button class="mdui-btn mdui-ripple" onclick="javascript:change('save')" mdui-dialog-close>保存</button>
-            <button class="mdui-btn mdui-ripple" onclick="javascript:change('doNotSave');" mdui-dialog-close>不保存</button>
-            <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+            <button class="mdui-btn waves-classic" onclick="javascript:change('save')" mdui-dialog-close>保存</button>
+            <button class="mdui-btn waves-classic" onclick="javascript:change('doNotSave');" mdui-dialog-close>不保存</button>
+            <button class="mdui-btn waves-classic" mdui-dialog-close>取消</button>
         </div>
     </div>
     <script>
@@ -218,7 +370,7 @@
             var noteListItems = "";
             var notes = 0;
             for (i = 0; i <= localStorage.getItem("notes"); i++) {
-                noteListItems += "<li class='mdui-list-item mdui-ripple mdui-ripple-black' name='noteListItems' id='" + i + "'><i class='mdui-list-item-icon mdui-icon material-icons' name='noteIcons'>edit</i><div class='mdui-list-item-content'>" + localStorage.getItem("noteTitle" + i) + "</div></li>";
+                noteListItems += "<div class='waves-block' name='noteListItems' id='" + i + "' style='border-radius: 114514px;margin: 4px 8px;'><li class='mdui-list-item'><i class='mdui-list-item-icon mdui-icon material-icons' name='noteIcons'>edit</i><div class='mdui-list-item-content'>" + localStorage.getItem("noteTitle" + i) + "</div></li></div>";
                 noteList.innerHTML = noteListItems;
             }
             for (i = 0; i <= localStorage.getItem("notes"); i++) {
@@ -249,6 +401,7 @@
                 if (type == "work") {
                     document.getElementsByName("noteListItems")[i].classList.add("mdui-color-red-100");
                 }
+                document.getElementsByName("noteListItems")[i].classList.add("waves-effect");
             }
             if (editing != "") {
                 document.getElementsByName("noteListItems")[editing].classList.add("mdui-list-item-active");
@@ -384,23 +537,30 @@
         function loadType() {
             autoSettingType = 0;
             if (typeLoaded != 1) {
-                document.getElementsByClassName("mdui-select-menu-item")[0].classList.add("mdui-color-yellow-100", "mdui-ripple-black");
-                document.getElementsByClassName("mdui-select-menu-item")[1].classList.add("mdui-color-blue-100", "mdui-ripple-black");
-                document.getElementsByClassName("mdui-select-menu-item")[2].classList.add("mdui-color-green-100", "mdui-ripple-black");
-                document.getElementsByClassName("mdui-select-menu-item")[3].classList.add("mdui-color-red-100", "mdui-ripple-black");
-                document.getElementsByClassName("mdui-select-menu-item")[0].addEventListener("click", function() {
+                var selectMenuItems = document.getElementsByClassName("mdui-select-menu-item");
+                selectMenuItems[0].classList.remove("mdui-ripple");
+                selectMenuItems[1].classList.remove("mdui-ripple");
+                selectMenuItems[2].classList.remove("mdui-ripple");
+                selectMenuItems[3].classList.remove("mdui-ripple");
+                selectMenuItems[4].classList.remove("mdui-ripple");
+                selectMenuItems[0].classList.add("mdui-color-yellow-100", "waves-block", "waves-effect");
+                selectMenuItems[1].classList.add("mdui-color-blue-100", "waves-block", "waves-effect");
+                selectMenuItems[2].classList.add("mdui-color-green-100", "waves-block", "waves-effect");
+                selectMenuItems[3].classList.add("mdui-color-red-100", "waves-block", "waves-effect");
+                selectMenuItems[4].classList.add("waves-block", "waves-effect");
+                selectMenuItems[0].addEventListener("click", function() {
                     setNoteType("travel");
                 });
-                document.getElementsByClassName("mdui-select-menu-item")[1].addEventListener("click", function() {
+                selectMenuItems[1].addEventListener("click", function() {
                     setNoteType("person");
                 });
-                document.getElementsByClassName("mdui-select-menu-item")[2].addEventListener("click", function() {
+                selectMenuItems[2].addEventListener("click", function() {
                     setNoteType("life");
                 });
-                document.getElementsByClassName("mdui-select-menu-item")[3].addEventListener("click", function() {
+                selectMenuItems[3].addEventListener("click", function() {
                     setNoteType("work");
                 });
-                document.getElementsByClassName("mdui-select-menu-item")[4].addEventListener("click", function() {
+                selectMenuItems[4].addEventListener("click", function() {
                     setNoteType("none");
                 });
             }
@@ -546,6 +706,19 @@
                 editNote();
             }
         }
+    </script>
+    <script src="waves/waves.min.js"></script>
+    <script>
+        var config = {
+            duration: 750,
+            delay: 0
+        };
+        Waves.init(config);
+        Waves.attach('.waves-block', ['waves-block']);
+        Waves.attach('.waves-circle', ['waves-circle']);
+        Waves.attach('.waves-light', ['waves-light']);
+        Waves.attach('.waves-classic', ['waves-classic']);
+        Waves.init(config);
     </script>
 </body>
 
